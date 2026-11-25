@@ -3,55 +3,524 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Amar Mini Social</title>
+  <title>InstaMini Social</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f2f4f7; margin: 0; padding: 16px; }
-    .box { max-width: 500px; margin: auto; background: #fff; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    input, textarea, button { width: 100%; box-sizing: border-box; margin-top: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; }
-    button { background: #1877f2; color: #fff; border: none; font-weight: bold; cursor: pointer; }
-    .post { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; margin-top: 12px; }
-    .name { font-weight: bold; color: #111827; }
-    .time { font-size: 12px; color: #6b7280; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    body {
+      background: #fafafa;
+      color: #262626;
+      padding-bottom: 40px;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 1px solid #dbdbdb;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 16px auto;
+      padding: 0 10px;
+    }
+
+    /* Profile & Create Post Card */
+    .card {
+      background: #ffffff;
+      border: 1px solid #dbdbdb;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dbdbdb;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fafafa;
+      margin-bottom: 10px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #8e8e8e;
+      background: #ffffff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 75px;
+    }
+
+    .btn {
+      background: #0095f6;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #0077c6;
+    }
+
+    .btn-secondary {
+      background: #efefef;
+      color: #262626;
+    }
+
+    .btn-secondary:hover {
+      background: #dbdbdb;
+    }
+
+    .btn-danger {
+      background: #ed4956;
+      color: #ffffff;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* Search & Filter */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .filter-bar input {
+      margin-bottom: 0;
+      flex: 2;
+    }
+
+    .filter-bar select {
+      margin-bottom: 0;
+      flex: 1;
+    }
+
+    /* Post Card */
+    .post {
+      background: #ffffff;
+      border: 1px solid #dbdbdb;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .post-header {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .username {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .time {
+      font-size: 11px;
+      color: #8e8e8e;
+    }
+
+    .post-media {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      background: #000000;
+      display: block;
+    }
+
+    .post-body {
+      padding: 12px 14px;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .like-btn {
+      background: none;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #262626;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .like-btn.liked {
+      color: #ed4956;
+    }
+
+    .likes-count {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .caption {
+      font-size: 14px;
+      line-height: 1.45;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    /* Comments */
+    .comments-box {
+      border-top: 1px solid #efefef;
+      padding-top: 8px;
+    }
+
+    .comment-item {
+      font-size: 13px;
+      margin-bottom: 5px;
+      line-height: 1.35;
+    }
+
+    .comment-user {
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .comment-form input {
+      margin-bottom: 0;
+      padding: 8px;
+      font-size: 13px;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #8e8e8e;
+      padding: 30px 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>Amar Mini Social</h2>
-    <input id="username" type="text" placeholder="Tomar naam likho" />
-    <textarea id="postText" rows="3" placeholder="Aj ki bhabcho? Post ba message likho..."></textarea>
-    <button onclick="addPost()">Post Koro</button>
+
+  <div class="navbar">
+    <div class="brand">InstaMini</div>
+    <div class="nav-actions">
+      <button class="btn btn-secondary btn-small" onclick="resetDemoData()">Sample Post</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Active User Setup -->
+    <div class="card">
+      <div class="card-title">
+        <span>Tumi / Profile</span>
+        <span id="postStats" style="font-size: 12px; color: #8e8e8e;">0 posts</span>
+      </div>
+      <div class="profile-row">
+        <input id="activeUser" type="text" placeholder="Tomar naam likho (e.g. Arijit)" style="margin-bottom: 0;" />
+        <button class="btn btn-small" onclick="saveProfile()">Save</button>
+      </div>
+    </div>
+
+    <!-- Create Post -->
+    <div class="card">
+      <div class="card-title">Notun Post Koro</div>
+      <textarea id="postCaption" placeholder="Ki bhabcho? Caption ba update likho..."></textarea>
+      <input id="postImage" type="url" placeholder="Chhobir Link (Image URL - optional)" />
+      <button class="btn" style="width: 100%;" onclick="addPost()">Share Post</button>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="filter-bar">
+      <input id="searchInput" type="text" placeholder="Post ba user khujo..." oninput="renderPosts()" />
+      <select id="filterSelect" onchange="renderPosts()">
+        <option value="all">Sob Post</option>
+        <option value="mine">Amar Post</option>
+        <option value="liked">Liked Post</option>
+      </select>
+    </div>
+
+    <!-- Feed -->
     <div id="feed"></div>
   </div>
 
   <script>
-    const feedEl = document.getElementById("feed");
-    let posts = JSON.parse(localStorage.getItem("mini_posts") || "[]");
+    const POSTS_KEY = "instamini_posts_v1";
+    const USER_KEY = "instamini_user_v1";
 
-    function render() {
-      feedEl.innerHTML = "";
-      posts.forEach((p) => {
-        const div = document.createElement("div");
-        div.className = "post";
-        div.innerHTML = `<div class="name">${p.name}</div><div class="time">${p.time}</div><p>${p.text}</p>`;
-        feedEl.appendChild(div);
-      });
+    function getCurrentUser() {
+      return localStorage.getItem(USER_KEY) || "Arijit";
+    }
+
+    function saveProfile() {
+      const val = document.getElementById("activeUser").value.trim();
+      const name = val || "Arijit";
+      localStorage.setItem(USER_KEY, name);
+      document.getElementById("activeUser").value = name;
+      renderPosts();
+      alert("Profile naam save hoyeche: " + name);
+    }
+
+    function loadPosts() {
+      const raw = localStorage.getItem(POSTS_KEY);
+      if (!raw) {
+        const starter = [
+          {
+            id: Date.now() + 1,
+            user: "Arijit",
+            caption: "Amar notun social app live hoye gelo! Like ar comment kore dekho.",
+            image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop",
+            time: "Ekhuni",
+            likes: 1,
+            likedByMe: true,
+            comments: [
+              { user: "Friend", text: "Darun hoyeche!" }
+            ]
+          }
+        ];
+        localStorage.setItem(POSTS_KEY, JSON.stringify(starter));
+        return starter;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return [];
+      }
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+    }
+
+    function resetDemoData() {
+      localStorage.removeItem(POSTS_KEY);
+      renderPosts();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
     }
 
     function addPost() {
-      const name = document.getElementById("username").value.trim() || "Anonymous";
-      const text = document.getElementById("postText").value.trim();
-      if (!text) return;
+      const user = getCurrentUser();
+      const caption = document.getElementById("postCaption").value.trim();
+      const image = document.getElementById("postImage").value.trim();
+
+      if (!caption && !image) {
+        alert("Kichu likho ba chhobir link daw!");
+        return;
+      }
+
+      const posts = loadPosts();
       posts.unshift({
-        name,
-        text,
-        time: new Date().toLocaleTimeString()
+        id: Date.now(),
+        user: user,
+        caption: caption,
+        image: image,
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        likes: 0,
+        likedByMe: false,
+        comments: []
       });
-      localStorage.setItem("mini_posts", JSON.stringify(posts));
-      document.getElementById("postText").value = "";
-      render();
+
+      savePosts(posts);
+      document.getElementById("postCaption").value = "";
+      document.getElementById("postImage").value = "";
+      renderPosts();
     }
 
-    render();
+    function toggleLike(id) {
+      const posts = loadPosts();
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      post.likedByMe = !post.likedByMe;
+      post.likes += post.likedByMe ? 1 : -1;
+      if (post.likes < 0) post.likes = 0;
+
+      savePosts(posts);
+      renderPosts();
+    }
+
+    function addComment(event, id) {
+      event.preventDefault();
+      const input = document.getElementById("comment-input-" + id);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const posts = loadPosts();
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      post.comments.push({
+        user: getCurrentUser(),
+        text: text
+      });
+
+      savePosts(posts);
+      input.value = "";
+      renderPosts();
+    }
+
+    function deletePost(id) {
+      const posts = loadPosts().filter(p => p.id !== id);
+      savePosts(posts);
+      renderPosts();
+    }
+
+    function renderPosts() {
+      const me = getCurrentUser();
+      const posts = loadPosts();
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const filter = document.getElementById("filterSelect").value;
+
+      document.getElementById("postStats").textContent = posts.length + " posts";
+
+      const filtered = posts.filter(p => {
+        if (filter === "mine" && p.user.toLowerCase() !== me.toLowerCase()) return false;
+        if (filter === "liked" && !p.likedByMe) return false;
+        if (query) {
+          const matchCaption = (p.caption || "").toLowerCase().includes(query);
+          const matchUser = (p.user || "").toLowerCase().includes(query);
+          return matchCaption || matchUser;
+        }
+        return true;
+      });
+
+      const feed = document.getElementById("feed");
+      if (filtered.length === 0) {
+        feed.innerHTML = '<div class="empty-msg">Kono post pawa jayni. Notun post koro!</div>';
+        return;
+      }
+
+      feed.innerHTML = filtered.map(post => {
+        const initial = (post.user || "U").charAt(0).toUpperCase();
+        const mediaHtml = post.image
+          ? `<img class="post-media" src="${escapeHtml(post.image)}" alt="Post image" onerror="this.style.display='none'" />`
+          : "";
+
+        const commentsHtml = (post.comments || [])
+          .map(c => `<div class="comment-item"><span class="comment-user">${escapeHtml(c.user)}</span>${escapeHtml(c.text)}</div>`)
+          .join("");
+
+        return `
+          <div class="post">
+            <div class="post-header">
+              <div class="user-info">
+                <div class="avatar">${escapeHtml(initial)}</div>
+                <div>
+                  <div class="username">${escapeHtml(post.user)}</div>
+                  <div class="time">${escapeHtml(post.time || "")}</div>
+                </div>
+              </div>
+              <button class="btn btn-danger" onclick="deletePost(${post.id})">Delete</button>
+            </div>
+            ${mediaHtml}
+            <div class="post-body">
+              <div class="action-bar">
+                <button class="like-btn ${post.likedByMe ? "liked" : ""}" onclick="toggleLike(${post.id})">
+                  ${post.likedByMe ? "♥" : "♡"} Like
+                </button>
+              </div>
+              <div class="likes-count">${post.likes} likes</div>
+              ${post.caption ? `<div class="caption"><span class="comment-user">${escapeHtml(post.user)}</span> ${escapeHtml(post.caption)}</div>` : ""}
+              <div class="comments-box">
+                ${commentsHtml}
+                <form class="comment-form" onsubmit="addComment(event, ${post.id})">
+                  <input id="comment-input-${post.id}" type="text" placeholder="Comment likho..." />
+                  <button class="btn btn-small" type="submit">Post</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("activeUser").value = getCurrentUser();
+    renderPosts();
   </script>
 </body>
 </html>
