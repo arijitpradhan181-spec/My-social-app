@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amar Mini Social</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f4f7; margin: 0; padding: 16px; }
+    .box { max-width: 500px; margin: auto; background: #fff; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    input, textarea, button { width: 100%; box-sizing: border-box; margin-top: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; }
+    button { background: #1877f2; color: #fff; border: none; font-weight: bold; cursor: pointer; }
+    .post { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; margin-top: 12px; }
+    .name { font-weight: bold; color: #111827; }
+    .time { font-size: 12px; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Amar Mini Social</h2>
+    <input id="username" type="text" placeholder="Tomar naam likho" />
+    <textarea id="postText" rows="3" placeholder="Aj ki bhabcho? Post ba message likho..."></textarea>
+    <button onclick="addPost()">Post Koro</button>
+    <div id="feed"></div>
+  </div>
+
+  <script>
+    const feedEl = document.getElementById("feed");
+    let posts = JSON.parse(localStorage.getItem("mini_posts") || "[]");
+
+    function render() {
+      feedEl.innerHTML = "";
+      posts.forEach((p) => {
+        const div = document.createElement("div");
+        div.className = "post";
+        div.innerHTML = `<div class="name">${p.name}</div><div class="time">${p.time}</div><p>${p.text}</p>`;
+        feedEl.appendChild(div);
+      });
+    }
+
+    function addPost() {
+      const name = document.getElementById("username").value.trim() || "Anonymous";
+      const text = document.getElementById("postText").value.trim();
+      if (!text) return;
+      posts.unshift({
+        name,
+        text,
+        time: new Date().toLocaleTimeString()
+      });
+      localStorage.setItem("mini_posts", JSON.stringify(posts));
+      document.getElementById("postText").value = "";
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
